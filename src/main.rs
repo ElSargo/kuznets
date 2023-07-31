@@ -101,21 +101,46 @@ fn value_from_year(year: usize, data: &[f64]) -> Option<f64> {
 }
 
 fn main() {
-    if let Some(Some(data)) = load_gini().map(|m| m.get("United States").cloned()) {
-        let line = data
-            .iter()
-            .enumerate()
-            .map(|(i, value)| ((i + START_YEAR) as f64, *value));
+    let mut data = vec![];
 
-        let plots = poloto::plots!(poloto::build::plot("Costa Rica").line(line));
+    if let (Ok(hdi), Ok(gdp)) = (load_hdi(), load_gdp()) {
+        for (name, hdi_points) in hdi.iter() {
+            if let Some(gdp_points) = gdp.get(name) {
+                for point in gdp_points.iter().zip(hdi_points.iter()) {
+                    data.push(point);
+                }
+            }
+        }
+
+        let plots = poloto::plots!(poloto::build::plot("").scatter(data));
 
         poloto::frame_build()
             .data(poloto::plots!(
-                build::markers(vec![2000., 2030.], [20., 60.]),
+                build::markers(vec![2000., 2030.], [0., 1.]),
                 plots
             ))
-            .build_and_label(("gaussian", "x", "y"))
-            .append_to(poloto::header().dark_theme())
-            .render_stdout();
+            .build_and_label(("HDI vs GDP", "HDI", "GDP"))
+            .append_to(poloto::header().light_theme())
+            .render_string();
     }
 }
+
+// if let Some(Some(data)) = load_gini().map(|m| m.get("United States").cloned()) {
+//     let line = data
+//         .iter()
+//         .enumerate()
+//         .map(|(i, value)| ((i + START_YEAR) as f64, *value));
+
+//     let plots = poloto::plots!(poloto::build::plot("Costa Rica").line(line));
+
+//     poloto::frame_build()
+//         .data(poloto::plots!(
+//             build::markers(vec![2000., 2030.], [20., 60.]),
+//             plots
+//         ))
+//         .build_and_label(("gaussian", "x", "y"))
+//         .append_to(poloto::header().dark_theme())
+//         .render_stdout();
+// }
+//
+//

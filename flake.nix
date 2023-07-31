@@ -30,6 +30,8 @@
 
           buildInputs = [
             rust
+            pkgs.jupyter
+            pkgs.evcxr
             pkgs.lldb_15
             pkgs.sccache
             pkgs.sccache
