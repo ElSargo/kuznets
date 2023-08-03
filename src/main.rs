@@ -7,7 +7,7 @@ use std::{
     hash::BuildHasher,
     io::{self, BufReader},
 };
-
+mod tmp;
 fn load_hdi() -> io::Result<HashMap<String, Vec<f64>>> {
     let file = File::open("./data/HDI.csv")?;
     let buffer = BufReader::new(file);
