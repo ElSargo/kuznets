@@ -18,32 +18,10 @@
         nixpkgs.overlays = [ fenix.overlays.complete ];
         devShells.default = pkgs.mkShell rec {
 
-
-          nativeBuildInputs = with pkgs; [
-            pkg-config
-            cmake
-            pkg-config
-            freetype
-            expat
-            fontconfig
-          ];
-
           buildInputs = [
             rust
             pkgs.jupyter
             pkgs.evcxr
-            pkgs.lldb_15
-            pkgs.sccache
-            pkgs.sccache
-            pkgs.udev
-            pkgs.alsa-lib
-            pkgs.vulkan-loader
-            pkgs.xorg.libX11
-            pkgs.xorg.libXcursor
-            pkgs.xorg.libXi
-            pkgs.xorg.libXrandr
-            pkgs.libxkbcommon
-            pkgs.wayland
           ];
           LD_LIBRARY_PATH = nixpkgs.lib.makeLibraryPath buildInputs;
         };
